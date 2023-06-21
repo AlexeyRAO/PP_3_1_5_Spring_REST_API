@@ -24,7 +24,7 @@ public class User implements UserDetails {
     private String department;
     @Column(name = "salary")
     private Long salary;
-    @Column (name = "userName")
+    @Column (name = "user_name")
     private String userName;
     @Column(name = "password")
     private String password;
