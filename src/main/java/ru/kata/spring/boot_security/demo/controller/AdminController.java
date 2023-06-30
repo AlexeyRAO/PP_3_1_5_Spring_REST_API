@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.controllers;
+package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,13 +49,13 @@ public class AdminController {
     }
     @PostMapping ("/user-creation")
     public String addCreateNewUser(User user) {
-        userService.save(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @PatchMapping("/user-update")
     public String updateUser(User user) {
-        userService.update(user);
+        userService.updateUser(user);
         return "redirect:/admin";
     }
 
@@ -73,7 +73,7 @@ public class AdminController {
 
     @DeleteMapping("/user-delete")
     public String deleteUser(Long id) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return "redirect:/admin";
     }
 }
