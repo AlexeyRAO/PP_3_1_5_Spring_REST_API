@@ -97,7 +97,7 @@ function editModal(id) {
             document.getElementById('editSurname').value = u.surname;
             document.getElementById('editDepartment').value = u.department;
             document.getElementById('editSalary').value = u.salary;
-            document.getElementById('editEmail').value = u.username;
+            document.getElementById('editUserName').value = u.username;
             document.getElementById('editPassword').value = "****";
 
         })
@@ -159,7 +159,7 @@ function deleteModal(id) {
             document.getElementById('deleteDepartment').value = u.department;
             document.getElementById('deleteSalary').value = u.salary;
             document.getElementById('deleteUserName').value = u.userName;
-            document.getElementById("deleteRole").value = u.role.map(r => r.role).join(", ");
+            document.getElementById("deleteRole").value = u.role.map(r => r.role.substring(5)).join(", ");
         })
     });
 }
