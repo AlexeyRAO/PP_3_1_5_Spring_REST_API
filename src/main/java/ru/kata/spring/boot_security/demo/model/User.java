@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,16 +30,15 @@ public class User implements UserDetails {
     private String userName;
     @Column(name = "password")
     private String password;
-    @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-    inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private Set<Role> roles;
+    @ManyToMany
+    @Fetch(FetchMode.JOIN)
+    private Set<Role> role;
 
     public User() {
     }
 
     public User(Long id, String name, String surname, String department, Long salary, String userName,
-                String password, Set<Role> roles) {
+                String password, Set<Role> role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -45,7 +46,7 @@ public class User implements UserDetails {
         this.salary = salary;
         this.userName = userName;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
     public Long getId() {
@@ -98,7 +99,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
+        return role.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
     }
 
     public String getPassword() {
@@ -134,12 +135,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<Role> getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Set<Role> role) {
+        this.role = role;
     }
 
     @Override
@@ -152,7 +153,7 @@ public class User implements UserDetails {
                 ", salary=" + salary +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
-                ", roles=" + roles +
+                ", role=" + role +
                 '}';
     }
 }

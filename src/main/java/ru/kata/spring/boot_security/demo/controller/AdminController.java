@@ -3,16 +3,14 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
-import java.util.List;
+
 
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -23,9 +21,9 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping
+    @GetMapping ("/admin")
     public String showAllUsers(Model model, Principal principal) {
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("allUsers", userService.findAll());
         User principalUser = userService.findByName(principal.getName());
         model.addAttribute("principalUser", principalUser);
         model.addAttribute("newUser", new User ());
@@ -34,47 +32,11 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/{id}")
-    public String showUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
-        model.addAttribute("titleTable", "Страница пользователя:");
+    @GetMapping("/currentUser")
+    public String showUser(Model model, Principal principal) {
+        User principalUser = userService.findByName(principal.getName());
+        model.addAttribute("principalUser", principalUser);
         return "user";
-    }
-
-    @GetMapping("/addUser")
-    public String addNewUser(Model model, @ModelAttribute("user") User user) {
-        List<Role> roles = roleService.getRoles();
-        model.addAttribute("rolesAdd", roles);
-        return "creation";
-    }
-    @PostMapping ("/user-creation")
-    public String addCreateNewUser(User user) {
-        userService.saveUser(user);
-        return "redirect:/admin";
-    }
-
-    @PatchMapping("/user-update")
-    public String updateUser(User user) {
-        userService.updateUser(user);
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/user-update/{id}")
-    public String updateUserForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "admin";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteUserForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "admin";
-    }
-
-    @DeleteMapping("/user-delete")
-    public String deleteUser(Long id) {
-        userService.deleteUser(id);
-        return "redirect:/admin";
     }
 }
 
